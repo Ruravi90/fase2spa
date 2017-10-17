@@ -13,7 +13,7 @@ class CreateCatServices extends Migration
      */
     public function up()
     {
-       Schema::create('cat_services', function (Blueprint $table) {
+        Schema::create('cat_services', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
             $table->float('price', 8, 2)->nullable()->unsigned();

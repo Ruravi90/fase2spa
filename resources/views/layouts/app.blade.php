@@ -10,19 +10,22 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>{{ config('app.name', 'Fase2Spa') }}</title>
     
+    <link href="{{ asset('img/favicon.png') }}" rel="icon" type="image/x-icon" />
+
     @include('layouts.styles')
     @yield('styles')
 </head>
-<body class="hold-transition skin-black sidebar-mini">
+<body class="hold-transition skin-black sidebar-mini" ng-app="App" ng-controller="MainController" ng-cloak>
     <div class="wrapper">
       <header class="main-header">
         <!-- Logo -->
         <a href="/" class="logo">
-          <span class="logo-mini"><img src="{{ asset('img/logo-fase2.png') }}"></span>
+          <span class="logo-mini">
+            <img width="55%" src="{{ asset('img/favicon.png') }}">
+          </span>
           <!-- logo for regular state and mobile devices -->
           <span class="logo-lg">
-            <img width="60px" src="{{ asset('img/logo-fase2.png') }}">
-
+            <img width="55%" src="{{ asset('img/favicon.png') }}">
           </span>
         </a>
         <!-- Header Navbar: style can be found in header.less -->
@@ -59,7 +62,7 @@
       <aside class="main-sidebar">
         <!-- sidebar: style can be found in sidebar.less -->
         <section class="sidebar">
-          <!-- search form -->
+          <!-- search form
           <form action="#" method="get" class="sidebar-form">
             <div class="input-group">
               <input type="text" name="q" class="form-control" placeholder="Search...">
@@ -69,60 +72,39 @@
                   </span>
             </div>
           </form>
-          <!-- /.search form -->
+          /.search form -->
           <!-- sidebar menu: : style can be found in sidebar.less -->
           <ul class="sidebar-menu" data-widget="tree">
+            <li><a href="{{ route('schedule_path') }}"><i class="fa fa-calendar"></i>Agenda</a></li>
+            <li><a href="{{ route('clients_path') }}"><i class="fa fa-group"></i>Clientes </a></li>
+            <li><a href="{{ route('sale_path') }}"><i class="fa fa-shopping-bag"></i>ventas</a></li>
             <li class="treeview">
               <a href="#">
-                <i class="fa fa-dashboard"></i> 
-                <span>Clientes</span>
-              </a>
-            </li>
-            <li class="treeview">
-              <a href="#">
-                <i class="fa fa-dashboard"></i> 
-                <span>Clientes</span>
-              </a>
-            </li>
-            <li class="treeview">
-              <a href="#">
-                <i class="fa fa-dashboard"></i> 
-                <span>Clientes</span>
-              </a>
-            </li>
-            <li class="treeview">
-              <a href="#">
-                <i class="fa fa-dashboard"></i> 
-                <span>Clientes</span>
-              </a>
-            </li>
-            <li class="treeview">
-              <a href="#">
-                <i class="fa fa-dashboard"></i> <span>Administracion</span>
-                <span class="pull-right-container">
-                  <i class="fa fa-angle-left pull-right"></i>
-                </span>
+                <i class="fa fa-dashboard"></i> <span>Administración</span>
+                <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span>
               </a>
               <ul class="treeview-menu">
-                <li><a href="/"><i class="fa fa-circle-o"></i> Usuarios</a></li>
-                <li><a href="/"><i class="fa fa-circle-o"></i> Roles</a></li>
-                <li><a href="/"><i class="fa fa-circle-o"></i> Permisos</a><li>
-                <li class="treeview">
-                  <a href="#">
-                    <span>Catalogos</span>
-                    <span class="pull-right-container">
-                      <i class="fa fa-angle-left pull-right"></i>
-                    </span>
-                  </a>
-                  <ul class="treeview-menu">
-                    <li><a href="/"><i class="fa fa-circle-o"></i> Usuarios</a></li>
-                    <li><a href="/"><i class="fa fa-circle-o"></i> Roles</a></li>
-                    <li><a href="/"><i class="fa fa-circle-o"></i> Permisos</a><li>
-                  </ul>
-                </li>
+                <li><a href="{{ route('provider_path') }}"><i class="fa fa-circle-o"></i>Proveedores</a></li>
+                <li><a href="{{ route('creditor_path') }}"><i class="fa fa-circle-o"></i>Acreedores</a></li>
+                <li><a href="{{ route('products_inventory_path') }}"><i class="fa fa-circle-o"></i>Inventario de productos</a></li>
+                <li><a href="{{ route('pills_inventory_path') }}"><i class="fa fa-circle-o"></i>Inventario de pastillas</a></li>
+                <li><a href="{{ route('user_path') }}"><i class="fa fa-circle-o"></i>Usuarios</a></li>
+                <li><a href="{{ route('rol_path') }}"><i class="fa fa-circle-o"></i>Roles</a></li>
               </ul>
             </li>
-            
+
+            <li class="treeview">
+                <a href="#">
+                  <i class="fa fa-th-list"></i> <span>Catalogos</span>
+                  <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span>
+                </a>
+                <ul class="treeview-menu">
+                  <li><a href="{{ route('cat_reference_path') }}"><i class="fa fa-circle-o"></i>Referencias</a></li>
+                  <li><a href="{{ route('cat_package_path') }}"><i class="fa fa-circle-o"></i>Paquetes</a></li>
+                  <li><a href="{{ route('cat_product_path') }}"><i class="fa fa-circle-o"></i>Productos</a><li>
+                  <li><a href="{{ route('cat_pill_path') }}"><i class="fa fa-circle-o"></i>Pastillas</a><li>
+                </ul>
+            </li>
           </ul>
         </section>
         <!-- /.sidebar -->
@@ -147,8 +129,10 @@
     @endguest
     </div>
     <!-- ./wrapper -->
-
     @include('layouts.javascripts')
-    @yield('javascripts')
+    @include('layouts.angular')
+    <!-- Scripts -->
+    <script src="{{ asset('js/app.js') }}"></script>
+    @yield('scripts')
 </body>
 </html>

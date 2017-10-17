@@ -25,8 +25,7 @@ class CreateCompanies extends Migration
             $table->foreign('company_id')->references('id')->on('companies');
         });
     }
-    }
-
+    
     /**
      * Reverse the migrations.
      *

@@ -31,7 +31,7 @@ class CreateSales extends Migration
             $table->float('price', 8, 2);
             $table->float('amount', 8, 2);
             $table->string('description')->nullable();
-            $table->bool('is_paid')->nullable();
+            $table->boolean('is_paid')->nullable();
             $table->timestamps();
         });
     }

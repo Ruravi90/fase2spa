@@ -562,7 +562,7 @@ throw new Error('AdminLTE requires jQuery')
 
     if (this.options.resetHeight) {
       $('body, html, ' + Selector.wrapper).css({
-        'height'    : 'auto',
+        'height'    : '100%',
         'min-height': '100%'
       })
     }
@@ -630,7 +630,7 @@ throw new Error('AdminLTE requires jQuery')
     // Make sure the body tag has the .fixed class
     if (!$('body').hasClass(ClassName.fixed)) {
       if (typeof $.fn.slimScroll !== 'undefined') {
-        $(Selector.sidebar).slimScroll({ destroy: true }).height('auto')
+        $(Selector.sidebar).slimScroll({ destroy: true }).height('100%')
       }
       return
     }

@@ -26,7 +26,7 @@
     <!-- FastClick -->
     <script src="{{ asset('js/fastclick.js') }}"></script>
     <!-- AdminLTE App -->
-    <script src="{{ asset('js/adminlte.min.js') }}"></script>
+    <script src="{{ asset('js/adminlte.js') }}"></script>
 
     <!-- Scripts -->
     <script src="{{ asset('js/app.js') }}"></script>

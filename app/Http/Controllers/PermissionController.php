@@ -7,42 +7,42 @@ use Illuminate\Http\Request;
 
 class PermissionController extends Controller
 {
+
+    public function getAll(){
+        $permissions = Permission::all();
+        return response($permissions, 200)->header('Content-Type', 'application/json');
+    }
+
+    public function find($id){
+        $permission = Permission::find($id);
+        return response($permission, 200)->header('Content-Type', 'application/json');
+    }
+
     public function add(Request $request)
     {
         $permiso              = new Permission;
-        $permiso->name        = $request->input("permiso_nombre");
-        $permiso->slug        = $request->input("permiso_slug");
-        $permiso->description = $request->input("permiso_descripcion");
-        if ($permiso->save()) {
-            return ['success' => true];
-        } else {
-            return view("mensajes.mensaje_error")->with("msj", "...Hubo un error al agregar ;...");
-        }
-
-    }
-
-    public function toAssign(Request $request)
-    {
-
-        $roleid = $request->input("rol_sel");
-        $idper  = $request->input("permiso_rol");
-        $rol    = Role::find($roleid);
-        $rol->assignPermission($idper);
-
-        if ($rol->save()) {
-            return ['success' => true];
-        } else {
-            return view("mensajes.mensaje_error")->with("msj", "...Hubo un error al agregar ;...");
-        }
-    }
-
-    public function update(Request $request)
-    {
+        $permiso->name        = $request->input("name");
+        $permiso->slug        = $request->input("slug");
+        $permiso->description = $request->input("description");
+        $permiso->save();
         return ['success' => true];
     }
 
-    public function delete(Request $request)
+
+    public function update(Request $request)
     {
+        $permiso              = Permission::find($id);
+        $permiso->name        = $request->input("name");
+        $permiso->slug        = $request->input("slug");
+        $permiso->description = $request->input("description");
+        $permiso->save();
+        return ['success' => true];
+    }
+
+    public function delete($id)
+    {
+        $permission = Permission::find($id);
+        $permission->delete();
         return ['success' => true];
     }
 }

@@ -13,7 +13,7 @@ class CreateCatPillsPillsInventory extends Migration
      */
     public function up()
     {
-       Schema::table('pills_inventory', function (Blueprint $table) {
+        Schema::table('pills_inventory', function (Blueprint $table) {
             $table->integer('pill_id')->unsigned();
             $table->foreign('pill_id')->references('id')->on('cat_pills');
         });

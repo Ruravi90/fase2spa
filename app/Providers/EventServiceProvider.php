@@ -16,6 +16,9 @@ class EventServiceProvider extends ServiceProvider
         'fase2\Events\Event' => [
             'fase2\Listeners\EventListener',
         ],
+        'fase2\Events\ActionTasks' => [
+            'fase2\Listeners\TasksEventListener',
+        ]
     ];
 
     /**

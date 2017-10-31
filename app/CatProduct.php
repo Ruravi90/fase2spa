@@ -10,20 +10,20 @@ class CatProduct extends Model
 {
 	protected $table = "cat_products";
 
-	protected $fillable = ['name','counter'];
+	protected $fillable = ['name'];
 
 	public function sales(){
 		return $this->hasMany(Sale::class);
-		//return $this->belongsTo(Address::class);
 	}
 
 	public function inventary(){
 		return $this->hasMany(ProductInventory::class);
-		//return $this->belongsTo(Address::class);
 	}
 
 	public function delete()
     { 
+    	$this->sales()->delete();
+        $this->inventary()->delete();
         return parent::delete();
     }
 }

@@ -1,58 +1,46 @@
 var app = angular.module('App');
 
 app.controller('UserController',function($rootScope,$scope, $http,$document,$uibModal,$ngConfirm,Notification) {
+    var $ctrl = this;
     $scope.pageSize = 10;
     $scope.currentPage = 1;
 
-    $scope.getProviders=function(){
+    $scope.getUsers=function(){
         $http.get(geturl()+'api/users')
         .then(function(xhr){
-            $scope.providers = xhr.data;
+            $scope.users = xhr.data;
         });
     }
     
-    $scope.getProviders(); 
+    $scope.getUsers(); 
 
     $scope.showModal = function(){
         var parentElem =  angular.element($document[0].querySelector('body'));
-        $scope.modalProvider = $uibModal.open({
+        $scope.modalUser = $uibModal.open({
             animation: true,
             templateUrl: 'modalUser.html',
             controller:'ModalUserCtrl', 
             scope: $scope
         })
 
-        $scope.modalProvider.result.then(function (result) {
-          
+        $scope.modalUser.result.then(function (result) {
+             $scope.getUsers(); 
         }, function () {
         });
     }
 
-    function formModal (scope,uibModalInstance, items){
-
-        
-    }
-
     $scope.add = function(){
         $scope.IsEdit =false;
-        $scope.provider ={};
+        $scope.user ={};
+        $scope.user.roles =[];
         $scope.showModal();
     }
 
     $scope.edit = function(){
         $scope.IsEdit = true;
-        $http.get(geturl()+'api/providers/'+this.provider.id)
+        $http.get(geturl()+'api/users/'+this.user.id)
         .then(function(xhr){
-            $scope.provider = xhr.data;
-            if(xhr.data.address.length > 0){
-                $scope.provider.street = xhr.data.address[0].name;
-                $scope.provider.inner_number= xhr.data.address[0].inner_number;
-                $scope.provider.outdoor_number= xhr.data.address[0].outdoor_number;
-                $scope.provider.state= xhr.data.address[0].state;
-                $scope.provider.town= xhr.data.address[0].town;
-                $scope.provider.postal_code= xhr.data.address[0].postal_code;
-                delete $scope.provider.address;
-            }
+            $scope.user = xhr.data;
             $scope.showModal();
         }); 
     }
@@ -74,7 +62,7 @@ app.controller('UserController',function($rootScope,$scope, $http,$document,$uib
                     text: 'Si, confirmar!',
                     btnClass: 'btn-danger',
                     action: function(scope, button){
-                        $http.delete(geturl()+'api/providers/'+_this.provider.id) 
+                        $http.delete(geturl()+'api/users/'+_this.user.id) 
                         .then(function(xhr){
                             $scope.getProviders();
                             Notification.success({message:'Proveedor eliminado correctamente!'});
@@ -87,45 +75,80 @@ app.controller('UserController',function($rootScope,$scope, $http,$document,$uib
 });
  
 app.controller('ModalUserCtrl', function ($http,$scope,$uibModalInstance,Notification) {
+    $scope.init_roles=[];
+    $scope.list_roles=[];
+    $scope.validUsername = null;
+
+    $http.get(geturl()+'api/roles')
+    .then(function(xhr){
+        $scope.init_roles = xhr.data;
+        $scope.renderListRoles();
+    });
+
+    $scope.assignRol = function(){
+        var i = $scope.init_roles.findIndex(p => p.id === parseInt($scope.rol_id));
+        var index = $scope.user.roles.findIndex(p => p.id === parseInt($scope.rol_id));
+        if(index == -1)
+            $scope.user.roles.push($scope.init_roles[i]);
+        $scope.renderListRoles();
+    }
+
+    $scope.removeRol = function(){
+        var index = $scope.user.roles.findIndex(p => p.id === parseInt(this.rol.id));
+        if(index != -1)
+             $scope.user.roles.splice(index, 1)
+    }
+
+    $scope.renderListRoles=function(){
+        $scope.list_roles=[];
+        $scope.init_roles.forEach(function(v1,i1) {
+            var index = $scope.user.roles.findIndex(p => p.id === parseInt(v1.id));
+            if(index == -1)
+                $scope.list_roles.push(v1);  
+        });
+    }
+
+    $scope.validateUsername = function(){
+        $http.post(geturl()+'api/users/validateUsername',{username:$scope.user.username})
+        .then(function(xhr){
+            $scope.validUsername = xhr.data.success;
+            if(xhr.data.success)
+                Notification.success({message:'Usuario valido!'});   
+        });
+    }
+
     $scope.save = function(){
         var data = {
-            business_name:$scope.provider.business_name,
-            contact_name:$scope.provider.contact_name,
-            office_phone:$scope.provider.office_phone,
-            email:$scope.provider.email,
-            street:$scope.provider.street,
-            inner_number:$scope.provider.inner_number,
-            outdoor_number:$scope.provider.outdoor_number,
-            state:$scope.provider.state,
-            town:$scope.provider.town,
-            postal_code:$scope.provider.postal_code
+            name:$scope.user.name,
+            lastname:$scope.user.lastname,
+            motherlastname:$scope.user.motherlastname,
+            email:$scope.user.email,
+            username:$scope.user.username,
+            phone_mobile:$scope.user.phone_mobile,
+            roles:$scope.user.roles
         }
 
-        $http.post(geturl()+'api/providers',data)  
+        $http.post(geturl()+'api/users',data)  
         .then(function(xhr){
-            Notification.success({message:'Proveedor creado correctamente!'});
+            Notification.success({message:'Usuario creado correctamente!'});
             $uibModalInstance.close('ok');
         });
     }
 
     $scope.update = function(){ 
         var data = {
-            business_name:$scope.provider.business_name,
-            contact_name:$scope.provider.contact_name,
-            office_phone:$scope.provider.office_phone,
-            email:$scope.provider.email,
-            street:$scope.provider.street,
-            inner_number:$scope.provider.inner_number,
-            outdoor_number:$scope.provider.outdoor_number,
-            state:$scope.provider.state,
-            town:$scope.provider.town,
-            postal_code:$scope.provider.postal_code
+            name:$scope.user.name,
+            lastname:$scope.user.lastname,
+            motherlastname:$scope.user.motherlastname,
+            email:$scope.user.email,
+            username:$scope.user.username,
+            phone_mobile:$scope.user.phone_mobile,
+            roles:$scope.user.roles
         }
-        $http.put(geturl()+'api/providers/'+$scope.provider.id,data)
+        $http.put(geturl()+'api/users/'+$scope.user.id,data)
         .then(function(xhr){
-            Notification.success({message:'Proveedor actualizado correctamente!'});
+            Notification.success({message:'Usuario actualizado correctamente!'});
             $uibModalInstance.close('ok');
-            $scope.getProviders(); 
         });
     }
 });

@@ -7,10 +7,9 @@ class CatPackage extends Model
 {
 	protected $table = "cat_packages";
 
-	//protected $fillable = ['name','last_name','mother_last_name','email'];
+	protected $fillable = ['name','price'];
 	public function sales(){
 		return $this->hasMany(Sale::class);
-		//return $this->belongsTo(Address::class);
 	}
 
 	public function delete()

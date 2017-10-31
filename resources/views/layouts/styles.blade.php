@@ -22,12 +22,17 @@
     <link rel="stylesheet" href="{{ asset('css/angular/angular-confirm.min.css') }}">
     <!-- angular-ui-notification -->
     <link rel="stylesheet" href="{{ asset('css/angular/angular-ui-notification.min.css') }}">
-
+    <!-- angular-ui-select -->
+    <link rel="stylesheet" href="{{ asset('css/angular/angular-ui-select.css') }}">
+    <!-- select2 -->
+    <link rel="stylesheet" href="{{ asset('css/plugins/select2.min.css') }}">
+    <!-- selectize -->
+    <link rel="stylesheet" href="{{ asset('css/plugins/selectize.default.css') }}">
     
     <!-- AdminLTE Skins. Choose a skin from the css/skins
        folder instead of downloading all of them to reduce the load. -->
-    <link rel="stylesheet" href="{{ asset('css/AdminLTE.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/AdminLTE.css') }}">
     <!-- Theme style -->
     <link rel="stylesheet" href="{{ asset('css/skins/_all-skins.min.css') }}">
-    <!-- Styles -->
-    <link rel="stylesheet"  href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <!-- Styles 
+    <link rel="stylesheet"  href="{{ asset('css/app.css') }}" rel="stylesheet">-->

@@ -10,7 +10,7 @@ window._ = require('lodash');
 try {
     window.$ = window.jQuery = require('jquery');
 
-    require('bootstrap-sass');
+    require('bootstrap');
 } catch (e) {}
 
 /**
@@ -43,11 +43,11 @@ if (token) {
  * allows your team to easily build robust real-time web applications.
  */
 
-// import Echo from 'laravel-echo'
+ //import Echo from 'laravel-echo'
 
-// window.Pusher = require('pusher-js');
+ //window.Pusher = require('pusher-js');
 
-// window.Echo = new Echo({
-//     broadcaster: 'pusher',
-//     key: 'your-pusher-key'
-// });
+ //window.Echo = new Echo({
+ //    broadcaster: 'pusher',
+ //    key: 'b6000c74b0d601914c3a'
+ //});

@@ -1,4 +1,4 @@
- <!-- jQuery 3 -->
+    <!-- jQuery 3 -->
     <script src="{{ asset('js/plugins/jquery.min.js') }}"></script>
     <!-- jQuery UI 1.11.4 -->
     <script src="{{ asset('js/plugins/jquery-ui.min.js') }}"></script>
@@ -25,7 +25,11 @@
     <script src="{{ asset('js/plugins/jquery.slimscroll.min.js') }}"></script>
     <!-- FastClick -->
     <script src="{{ asset('js/plugins/fastclick.js') }}"></script>
-
-
+    <!-- underscore -->
+    <script src="{{ asset('js/plugins/underscore.js') }}"></script>
+    <!-- select2 -->
+    <script src="{{ asset('js/plugins/select2.js') }}"></script>
+    <!-- selectize -->
+    <script src="{{ asset('js/plugins/selectize.js') }}"></script>
     <!-- AdminLTE App -->
     <script src="{{ asset('js/adminlte.js') }}"></script>

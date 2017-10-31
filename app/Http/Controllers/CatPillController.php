@@ -1,11 +1,7 @@
 <?php
-
 namespace fase2\Http\Controllers;
-
 use Illuminate\Http\Request;
 use fase2\CatPill;
-use Illuminate\Http\Request;
-use fase2\Http\Requests\CatPillRequest;
 
 class CatPillController extends Controller
 {
@@ -14,7 +10,7 @@ class CatPillController extends Controller
     }
 
     // Api rest
-    public function getAll(){
+    public function getAll(){ 
         $products =  CatPill::all();
         return response($products, 200)->header('Content-Type', 'application/json');
     }
@@ -24,19 +20,19 @@ class CatPillController extends Controller
         return response($product, 200)->header('Content-Type', 'application/json');
     }
 
-	public function add(CatPillRequest $request){
-        $products = CatPill::create(
-            $request->only('name','counter')
-        );
-
+	public function add(Request $request){
+        $pill =new CatPill;
+        $pill->name = $request->get('name');
+        $pill->price = $request->get('price');
+        $pill->save();
         return ['success' => true]; 
 	}
 
-    public function update($id,CatPillRequest $request){// se envia el id a $client 
-    	$product = CatPill::find($id);
-		$product->update(
-            $request->only('name','counter')
-        );
+    public function update($id,Request $request){// se envia el id a $client 
+    	$pill = CatPill::find($id);
+		$pill->name = $request->get('name');
+        $pill->price = $request->get('price');
+        $pill->save();
     	return ['success' => true]; 
     }
 

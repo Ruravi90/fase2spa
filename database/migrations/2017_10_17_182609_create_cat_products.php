@@ -17,8 +17,7 @@ class CreateCatProducts extends Migration
         Schema::create('cat_products', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
-            $table->integer('counter');
-            $table->float('price', 8, 2)->nullable()->unsigned();
+            $table->float('price', 8, 2);
             $table->timestamps();
         });
     }

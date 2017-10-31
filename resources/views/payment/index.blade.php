@@ -14,7 +14,7 @@
 
       <!-- List group -->
       <ul class="list-group">
-        <li class="list-group-item" ng-repeat="client in clients">
+        <li class="list-group-item" ng-repeat="client in clients | filter:anySearch">
           <div class="row">
             <div class="col-md-1"><%client.name%></div>
             <div class="col-md-2"><%client.lastname%></div> 

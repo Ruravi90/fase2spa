@@ -14,7 +14,7 @@
       </div>
       <!-- List group -->
       <ul class="list-group">
-        <li class="list-group-item" ng-repeat="service in services">
+        <li class="list-group-item" ng-repeat="service in services | filter:anySearch">
           <div class="row">
             <div class="col-md-10"><%service.name%></div>
             <div class="col-md-2">

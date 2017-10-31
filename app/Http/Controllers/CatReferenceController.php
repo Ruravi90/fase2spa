@@ -24,20 +24,17 @@ class CatReferenceController extends Controller
     }
 
 	public function add(CatReferenceRequest $request){ 
-
-		$reference = new CatReference;
-		$reference->name = $request->get('name');
-		$reference->save();
-
+		CatReference::create(
+            $request->only('name')
+        );
 		return ['success' => true]; 
 	}
 
     public function update($id,CatReferenceRequest $request){// se envia el id a $client 
-    	//dd($client->address()->first()->id); //saber que contiene la variable
-
     	$reference = CatReference::find($id);
-		$reference->name = $request->get('name');
-		$reference->save();
+		$reference->update(
+            $request->only('name')
+        );
     	return ['success' => true]; 
     }
 

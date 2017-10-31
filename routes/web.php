@@ -1,5 +1,5 @@
 <?php
-
+use fase2\Events\TasksPusherEvent;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -47,6 +47,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::name('user_path')->get('/users', 'UserController@index');
     Route::get('/api/users', 'UserController@getAll');
     Route::get('/api/users/{id}', 'UserController@find');
+    Route::post('/api/users/validateUsername', 'UserController@validateUsername');
     Route::post('/api/users', 'UserController@add');
     Route::put('/api/users/{id}', 'UserController@update');
     Route::delete('/api/users/{id}', 'UserController@delete');
@@ -61,7 +62,6 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('/api/permissions', 'PermissionController@getAll');
     Route::get('/api/permissions/{id}', 'PermissionController@find');
     Route::post('/api/permissions', 'PermissionController@add');
-    Route::post('/api/permissions/{id}', 'PermissionController@toAssign');
     Route::put('/api/permissions/{id}', 'PermissionController@update');
     Route::delete('/api/permissions/{id}', 'PermissionController@delete');
 
@@ -103,10 +103,21 @@ Route::group(['middleware' => 'auth'], function () {
     Route::name('sale_path')->get('/sales', 'SaleController@index');
 
     Route::name('products_inventory_path')->get('/products_inventory', 'ProductInventoryController@index');
+    Route::get('/api/products_inventory', 'ProductInventoryController@getAll');
+    Route::get('/api/products_inventory/{id}', 'ProductInventoryController@find');
+    Route::post('/api/products_inventory', 'ProductInventoryController@add');
+    Route::put('/api/products_inventory/{id}', 'ProductInventoryController@update');
+    Route::delete('/api/products_inventory/{id}', 'ProductInventoryController@delete');
 
     Route::name('pills_inventory_path')->get('/pills_inventory', 'PillInventoryController@index');
-
+    Route::get('/api/pills_inventory', 'PillInventoryController@getAll');
+    Route::get('/api/pills_inventory/{id}', 'PillInventoryController@find');
+    Route::post('/api/pills_inventory', 'PillInventoryController@add');
+    Route::put('/api/pills_inventory/{id}', 'PillInventoryController@update');
+    Route::delete('/api/pills_inventory/{id}', 'PillInventoryController@delete');
+    
     Route::name('payment_path')->get('/payments', 'PaymentController@index');
 
-});
+    Route::post('/socketTask', 'TaskSocketController@assing');
 
+});

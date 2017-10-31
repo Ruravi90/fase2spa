@@ -23,20 +23,18 @@ class CatPackageController extends Controller
     }
 
 	public function add(CatPackageRequest $request){
-
-		$package = new CatPackage;
-		$package->name = $request->get('name');
-		$package->save();
+        $package = CatPackage::create(
+            $request->only('name','price')
+        );
 
 		return ['success' => true]; 
 	}
 
     public function update($id,CatPackageRequest $request){// se envia el id a $client 
-    	//dd($client->address()->first()->id); //saber que contiene la variable
-
     	$package = CatPackage::find($id);
-		$package->name = $request->get('name');
-		$package->save();
+		$package->update(
+            $request->only('name','price')
+        );
     	return ['success' => true]; 
     }
 

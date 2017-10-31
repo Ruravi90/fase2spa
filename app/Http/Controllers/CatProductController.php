@@ -23,18 +23,18 @@ class CatProductController extends Controller
     }
 
 	public function add(CatProductRequest $request){
-        $products = CatProduct::create(
-            $request->only('name','counter')
-        );
-
+        $product =new CatProduct;
+        $product->name = $request->get('name');
+        $product->price = $request->get('price');
+        $product->save();
         return ['success' => true]; 
 	}
 
     public function update($id,CatProductRequest $request){// se envia el id a $client 
     	$product = CatProduct::find($id);
-		$product->update(
-            $request->only('name','counter')
-        );
+		$product->name = $request->get('name');
+        $product->price = $request->get('price');
+        $product->save();
     	return ['success' => true]; 
     }
 

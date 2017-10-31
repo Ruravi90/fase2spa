@@ -38,7 +38,6 @@ class CreateClients extends Migration
     {
         //
         Schema::table('clients', function (Blueprint $table) {
-            //
             $table->dropForeign(['reference_id']);
         }); 
 

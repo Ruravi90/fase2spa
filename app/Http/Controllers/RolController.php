@@ -3,6 +3,7 @@
 namespace fase2\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Caffeinated\Shinobi\Models\Role;
 
 class RolController extends Controller
 {
@@ -11,27 +12,52 @@ class RolController extends Controller
         return view('rol.index');
     }
 
+    public function getAll(){
+        $roles = Role::all();
+        return response($roles, 200)->header('Content-Type', 'application/json');
+    }
+
+    public function find($id){
+        $rol = Role::with('permissions')->find($id);
+        return response($rol, 200)->header('Content-Type', 'application/json');
+    }
+
     public function add(Request $request)
     {
 
         $rol              = new Role;
-        $rol->name        = $request->input("rol_nombre");
-        $rol->slug        = $request->input("rol_slug");
-        $rol->description = $request->input("rol_descripcion");
-        if ($rol->save()) {
-            return ['success' => true];
-        } else {
-            return view("mensajes.mensaje_error")->with("msj", "...Hubo un error al agregar ;...");
+        $rol->name        = $request->input("name");
+        $rol->slug        = $request->input("slug");
+        $rol->description = $request->input("description");
+        $rol->save();
+        foreach ($request->input("permissions") as $key => $value) {
+           $rol->assignPermission($value["id"]);
         }
-    }
+        $rol->save(); 
 
-    public function update(Request $request)
-    {
         return ['success' => true];
     }
 
-    public function delete(Request $request)
+    public function update($id,Request $request)
     {
+        $rol              = Role::find($id);
+        $rol->name        = $request->input("name");
+        $rol->slug        = $request->input("slug");
+        $rol->description = $request->input("description");
+        $rol->revokeAllPermissions();
+        $rol->save();
+        foreach ($request->input("permissions") as $key => $value) {
+            $rol->assignPermission($value["id"]);
+        }
+        $rol->save();
+        return ['success' => true];
+    }
+
+    public function delete($id)
+    {
+        $rol = Role::find($id);
+        $rol->revokeAllPermissions();
+        $rol->delete();
         return ['success' => true];
     }
 

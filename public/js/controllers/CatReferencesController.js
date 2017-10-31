@@ -1,5 +1,4 @@
 var app = angular.module('App');
-
 app.controller('CatReferencesController',function($rootScope,$scope, $http,$document,$uibModal,$ngConfirm,Notification) {
     $scope.pageSize = 10;
     $scope.currentPage = 1;

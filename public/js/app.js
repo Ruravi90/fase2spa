@@ -1,9 +1,9 @@
 
 function geturl(){
-    return window.location.origin+'/fase2spa/public/';
+    return window.location.origin+'/';
 }
 
-var app = angular.module('App', ['ui.bootstrap','cp.ngConfirm','ui-notification', 'ui.bootstrap.datetimepicker'], function($interpolateProvider) {
+var app = angular.module('App', ['ui.bootstrap','cp.ngConfirm','ui-notification', 'ui.bootstrap.datetimepicker','scania.angular.select2'], function($interpolateProvider) {
 	$interpolateProvider.startSymbol('<%');
 	$interpolateProvider.endSymbol('%>');
 });
@@ -28,5 +28,5 @@ app.run(function($rootScope,$http, $templateCache) {
 });
 
 app.controller('MainController', function($rootScope,$scope, $http,Notification) {
-
+    $rootScope.anySearch='';
 });

@@ -13,9 +13,10 @@ class CreateCatPills extends Migration
      */
     public function up()
     {
-       Schema::create('cat_pills', function (Blueprint $table) {
+        Schema::create('cat_pills', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
+            $table->float('price', 8, 2);
             $table->timestamps();
         });
     }

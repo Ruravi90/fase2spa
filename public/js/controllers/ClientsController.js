@@ -3,11 +3,6 @@ app.controller('ClientsController',function($rootScope,$scope, $http,$document,$
     $scope.pageSize = 10;
     $scope.currentPage = 1;
 
-    $http.get(geturl()+'api/cat_references') 
-    .then(function(xhr){
-        $scope.references = xhr.data;
-    });
-
     $scope.getClients=function(){
         $http.get(geturl()+'api/clients')
         .then(function(xhr){
@@ -93,6 +88,12 @@ app.controller('ClientsController',function($rootScope,$scope, $http,$document,$
 
 
 app.controller('ModalClientsCtrl', function ($http,$scope,$uibModalInstance,Notification) {
+     
+    $http.get(geturl()+'api/cat_references') 
+    .then(function(xhr){
+        $scope.references = xhr.data;
+        $scope.references.push({id:0,name:'Otro'});
+    });
 
     $scope.save = function(form){
          if(form.$invalid){

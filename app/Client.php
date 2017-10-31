@@ -19,7 +19,7 @@ class Client extends Model
         //return $this->belongsTo(Address::class);
     }
 
-    public function cat_reference(){
+    public function reference(){
 		return $this->belongsTo(CatReference::class);
 	}
 
@@ -27,6 +27,7 @@ class Client extends Model
     {
         // delete all related address 
         $this->address()->delete();
+        $this->schedules()->delete();
         // as suggested by Dirk in comment,
         // it's an uglier alternative, but faster
         // Address::where("client_id", $this->id)->delete()

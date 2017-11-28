@@ -21,10 +21,13 @@
                 <div class="panel-heading">Calendario</div>
 
                 <div class="panel-body">
-                    
+                    <div id="fullcalendar"></div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+@endsection
+@section('scripts')
+  <script src="{{ asset('js/controllers/ScheduleController.js') }}"></script>
 @endsection

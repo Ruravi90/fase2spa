@@ -40,10 +40,10 @@
 				<div class="form-group col-md-12">
 			    	<select id="cmbRol" 
 			    			style="width: 100%"
-                            data-placeholder="Selecciona el rol"
+                            data-placeholder="Selecciona el producto"
                             ng-model="product.product_id"
                             sc-single-select>
-                        <option ng-repeat="item in catProducts" ng-value="item.id" >
+                        <option ng-repeat="item in catProducts" ng-value="item.id" selected="item.id == product.product_id">
                            <%item.name%>
                         </option>
                     </select>

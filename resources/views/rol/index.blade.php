@@ -82,9 +82,8 @@
 			    	<select id="cmbPermission" 
 			    			style="width: 100%"
                             data-placeholder="Selecciona los permisos"
-                            ng-model="permissions_id"
                             sc-single-select>
-                        <option ng-repeat="item in list_permissions" ng-value="item.id" >
+                        <option ng-repeat="item in list_permissions" ng-value="item.id" ng-model="permissions_id">
                            <%item.name%>
                         </option>
                     </select>

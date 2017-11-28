@@ -2,4 +2,7 @@
   <div class="box-header with-border">
   	<h3 class="box-title"><i class="fa fa-group"></i> Venta</h3>
   </div>
+  <div class="box-body">
+    
+  </div>
 </div>

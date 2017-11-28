@@ -56,12 +56,13 @@
 			  	</div>
 			</div>
 			<div class="row">
-				<div class="form-group col-md-6" ng-class="{'has-error':clientForm.phone_home.$invalid && clientForm.phone_home.$pristine}">
-			    	<input type="text" name="phone_home" class="form-control" ng-model="client.phone_home" ng-pattern="/^(?:\d{10}|\w+@\w+\.\w{2,3})$/" required placeholder="Telefono de casa">
+				<div class="form-group col-md-6">
+			    	<input type="text" name="phone_home" class="form-control" ng-model="client.phone_home" ng-pattern="/^(?:\d{10}|\w+@\w+\.\w{2,3})$/" placeholder="Telefono de casa">
 					<span class="text-red" ng-if="clientForm.phone_home.$error.pattern">Digité el telefono a 10 numeros.</span>
 			  	</div>
 			  	<div class="form-group col-md-6">
-			    	<input type="text" name="phone_mobile" class="form-control" ng-model="client.phone_mobile" placeholder="Celular"> 
+			    	<input type="text" name="phone_mobile" class="form-control" ng-model="client.phone_mobile" ng-pattern="/^(?:\d{10}|\w+@\w+\.\w{2,3})$/" placeholder="Telefono celular">
+					<span class="text-red" ng-if="clientForm.phone_mobile.$error.pattern">Digité el telefono a 10 numeros.</span>
 			  	</div>
 			</div>
 			<div class="row">
@@ -87,11 +88,12 @@
 			  	</div>
 			</div>
 			<div class="row">
-				<div class="form-group col-md-6" ng-class="{'has-error':clientForm.reference.$invalid && clientForm.reference.$pristine}">
- 					<select id="cmbReference" style="width: 100%"
+				<div class="form-group col-md-6" ng-class="{'has-error':client.reference_id == ''}">
+ 					<select id="cmbReference" name="reference" style="width: 100%"
                             data-placeholder="Selecciona la referencia"
                             data-allow-clear="true"
                             ng-model="client.reference_id"
+                            ng-required="true"
                             sc-single-select>
                         <option ng-bind="options.placeholder"></option>
                         <option ng-repeat="item in references" ng-value="item.id" selected="<%client.reference_id == item.id%>">
@@ -99,8 +101,8 @@
                         </option>
                     </select>
 			  	</div>
-			  	<div class="form-group col-md-6" ng-if="client.reference_id == 0" ng-class="{'has-error':clientForm.other_reference.$invalid && clientForm.other_reference.$pristine}">
-			    	<input type="text" name="other_reference" class="form-control" ng-model="client.other_ref" ng-required="client.reference_id == 0" placeholder="Especifique"> 
+			  	<div class="form-group col-md-6" ng-if="client.reference_id == -1" ng-class="{'has-error':clientForm.other_reference.$invalid && clientForm.other_reference.$pristine}">
+			    	<input type="text" name="other_reference" class="form-control" ng-model="client.other_ref" ng-required="client.reference_id == -1" placeholder="Especifique"> 
 			  	</div>
 			</div> 
       </div>

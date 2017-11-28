@@ -81,8 +81,8 @@
 			  	</div>
 			</div>
 			<div class="row">
-				<div class="form-group col-md-6" ng-class="{'has-error':userForm.email.$invalid && userForm.email.$pristine}">
-			    	<input type="email" name="email" class="form-control" ng-model="user.email" ng-pattern="/^[a-z]+[a-z0-9._]+@[a-z]+\.[a-z.]{2,5}$/" placeholder="Correo" required>
+				<div class="form-group col-md-6">
+			    	<input type="email" name="email" class="form-control" ng-model="user.email" ng-pattern="/^[a-z]+[a-z0-9._]+@[a-z]+\.[a-z.]{2,5}$/" placeholder="Correo">
 			    	<span ng-if="userForm.email.$error.pattern">Digité un correo válido por ejemplo: usuario@dominio.com</span>
 			  	</div>
 				<div class="form-group col-md-6">

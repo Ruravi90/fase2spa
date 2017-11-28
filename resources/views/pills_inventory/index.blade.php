@@ -40,10 +40,10 @@
 				<div class="form-group col-md-8">
 			    	<select id="cmbRol" 
 			    			style="width: 100%"
-                    data-placeholder="Selecciona el rol"
+                    data-placeholder="Selecciona la pastilla"
                     ng-model="pill.pill_id"
                     sc-single-select>
-                <option ng-repeat="item in catPills" ng-value="item.id" >
+                <option ng-repeat="item in catPills" ng-value="item.id" selected="item.id == pill.pill_id">
                    <%item.name%>
                 </option>
             </select>

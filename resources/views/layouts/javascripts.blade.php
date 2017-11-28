@@ -31,5 +31,7 @@
     <script src="{{ asset('js/plugins/select2.js') }}"></script>
     <!-- selectize -->
     <script src="{{ asset('js/plugins/selectize.js') }}"></script>
+    <!-- selectize -->
+    <script src="{{ asset('js/plugins/fullcalendar.js') }}"></script>
     <!-- AdminLTE App -->
     <script src="{{ asset('js/adminlte.js') }}"></script>

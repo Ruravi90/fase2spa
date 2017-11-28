@@ -35,6 +35,7 @@ app.controller('ClientsController',function($rootScope,$scope, $http,$document,$
     $scope.add = function(){
         $scope.IsEdit =false;
         $scope.client ={};
+        $scope.client.reference_id = null;
         $scope.showModal();
     }
 
@@ -92,7 +93,7 @@ app.controller('ModalClientsCtrl', function ($http,$scope,$uibModalInstance,Noti
     $http.get(geturl()+'api/cat_references') 
     .then(function(xhr){
         $scope.references = xhr.data;
-        $scope.references.push({id:0,name:'Otro'});
+        $scope.references.push({id:-1,name:'Otro'});
     });
 
     $scope.save = function(form){

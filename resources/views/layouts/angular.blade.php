@@ -16,3 +16,4 @@
 <script src="{{ asset('js/directives/paging.min.js') }}"></script>
 <!-- Angular select2 -->
 <script src="{{ asset('js/directives/sc-select2.js') }}"></script>
+<script src="{{ asset('js/directives/angular-ui-select.js') }}"></script>

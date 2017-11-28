@@ -22,13 +22,16 @@
     <link rel="stylesheet" href="{{ asset('css/angular/angular-confirm.min.css') }}">
     <!-- angular-ui-notification -->
     <link rel="stylesheet" href="{{ asset('css/angular/angular-ui-notification.min.css') }}">
+    <!-- select2 -->
+       <link href="{{ asset('css/plugins/select2.css') }}"  rel="stylesheet" type="text/css">
+    <link href="//rawgit.com/fk/select2-bootstrap-css/master/select2-bootstrap.css"  rel="stylesheet" type="text/css">
     <!-- angular-ui-select -->
     <link rel="stylesheet" href="{{ asset('css/angular/angular-ui-select.css') }}">
-    <!-- select2 -->
-    <link rel="stylesheet" href="{{ asset('css/plugins/select2.min.css') }}">
     <!-- selectize -->
     <link rel="stylesheet" href="{{ asset('css/plugins/selectize.default.css') }}">
-    
+    <!-- fullcalendar -->
+    <link rel="stylesheet" href="{{ asset('css/plugins/fullcalendar.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/plugins/fullcalendar.print.css') }}">
     <!-- AdminLTE Skins. Choose a skin from the css/skins
        folder instead of downloading all of them to reduce the load. -->
     <link rel="stylesheet" href="{{ asset('css/AdminLTE.css') }}">

@@ -80,11 +80,7 @@ app.controller('CatServicesController',function($rootScope,$scope, $http,$docume
 
 app.controller('ModalCatServicesCtrl', function ($http,$scope,$uibModalInstance,Notification) {
     $scope.save = function(){
-        var data = {
-            name:$scope.service.name
-        }
-
-        $http.post(geturl()+'api/cat_services',data) 
+        $http.post(geturl()+'api/cat_services',$scope.service) 
         .then(function(xhr){
             Notification.success({message:'Servicio creado correctamente!'});
             $uibModalInstance.close('add');
@@ -92,11 +88,7 @@ app.controller('ModalCatServicesCtrl', function ($http,$scope,$uibModalInstance,
     }
 
     $scope.update = function(){
-        var data = {
-            name:$scope.service.name
-        }
-
-        $http.put(geturl()+'api/cat_services/'+$scope.service.id,data)
+        $http.put(geturl()+'api/cat_services/'+$scope.service.id,$scope.service)
         .then(function(xhr){
             Notification.success({message:'Servico actualizado correctamente!'});
             $uibModalInstance.close('update');

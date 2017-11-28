@@ -1,290 +1,306 @@
-angular.module("rt.select2", [])
-    .value("select2Config", {})
-    .factory("select2Stack", function () {
-        var stack = [];
+/**
+ * scania-angular-select2
+ * https://github.com/scania-bootstrap/scania-angular-select2
+ * License: MIT
+ *
+ * @ngdoc directive
+ * @name scSelect2
+ * @module scania.angular.select2
+ *
+ * @description AngularJS directive for Select2
+ */
+(function () {
+ 'use strict';
+    /**
+     * @ngdoc module
+     * @name scania.angular.select2
+     *
+     * @description
+     * Scania select2 directive module
+     */
+    angular.module('scania.angular.select2', []);
 
-        return {
-            $register: function (callbackElem) {
-                stack.push(callbackElem);
-            },
-            $unregister: function (callbackElem) {
-                var idx = stack.indexOf(callbackElem);
-                if (idx !== -1) {
-                    stack.splice(idx, 1);
+    /**
+     * @ngdoc directive
+     * @name scSingleSelect
+     * @module scania.angular.select2
+     *
+     * @description AngularJS directive for single select
+     * @param $compile
+     * @param $timeout
+     * @returns {{restrict: string, scope: {ngModel: string, templateSelection: Function, templateResult: Function, matcher: Function, createSearchChoice: Function}, link: Function}}
+     */
+    angular.module('scania.angular.select2').directive('scSingleSelect', ['$compile', '$timeout', scSingleSelect]);
+    /**
+     * @ngdoc directive
+     * @name scMultiSelect
+     * @module scania.angular.select2
+     *
+     * @description AngularJS directive for multi select
+     * @param $compile
+     * @param $timeout
+     * @returns {{restrict: string, scope: {ngModel: string, templateSelection: Function, templateResult: Function, matcher: Function, createSearchChoice: Function}, link: Function}}
+     */
+    angular.module('scania.angular.select2').directive('scMultiSelect', ['$compile', '$timeout', scMultiSelect]);
+    /**
+     * @ngdoc directive
+     * @name scInputSelect
+     * @module scania.angular.select2
+     *
+     * @description AngularJS directive for input select tokenizer
+     * @param $compile
+     * @param $timeout
+     * @returns {{restrict: string, scope: {ngModel: string, templateSelection: Function, templateResult: Function, matcher: Function, createSearchChoice: Function, tokenSeparators: Function}, link: Function}}
+     */
+    angular.module('scania.angular.select2').directive('scInputSelect', ['$compile', '$timeout', scInputSelect]);
+
+    /**
+     * @ngdoc method
+     * @name scania.angular.select2#init
+     * @methodOf scania.angular.select2
+     *
+     * @description
+     * Initialize a select component
+     *
+     */
+    function init($scope, element, $attr, $compile) {
+        if ($attr.language) {
+            var domElem = '<script src="select2_locale_' + $attr.language + '.js" async defer></script>';
+            $(element).append($compile(domElem)($scope));
+        }
+ 
+        var options = _.pick($(element).data(), function (value, key) {
+                return !startsWith(key, '$');
+            }),
+            minimumResultsForSearch = 10,
+            events = 'input keyup';
+
+        options.formatSelection = $scope.templateSelection || $.fn.select2.defaults.formatSelection;
+        options.formatResult = $scope.templateResult || $.fn.select2.defaults.formatResult;
+        options.matcher = $scope.matcher || $.fn.select2.defaults.matcher;
+        options.minimumResultsForSearch = (options.minimumResultsForSearch > 10) ? options.minimumResultsForSearch : minimumResultsForSearch;
+
+        $('.select2-input').bind(events, function (event) {
+            var minimumInputLength = (options.minimumInputLength) ? options.minimumInputLength : 3;
+            if (event.currentTarget.value.length >= minimumInputLength) {
+                $scope.$emit('select.search-input', event.currentTarget.value);
+            }
+        });
+        return options;
+    }
+    /**
+     * @ngdoc method
+     * @name scania.angular.select2#updateSelectedItemsOnDisplay
+     * @methodOf scania.angular.select2
+     *
+     * @description
+     * Updates selected items
+     *
+     */
+    function updateSelectedItemsOnDisplay($scope, select, options, inputOptionsLabelProperty, input) {
+        if (!$scope.ngModel) return;
+
+        //True for both single and multiselect
+        if ($scope.ngModel.then && typeof $scope.ngModel.then === 'function') {
+            $scope.ngModel.then(function (response) {
+                //Multi select can have 1 or several default selected options,use each to initialize the select
+                //Single select has 1 default selected option, no iteration is needed to initialize the select
+                var selectedItems = $attr.multiple ? response.data : new Array(response.data);
+                if (input) {
+                    populatePreselectedInputOptions(select, selectedItems, options.id, inputOptionsLabelProperty);
+                } else {
+                    populatePreselectedOptions(select, selectedItems, options.value);
                 }
+            });
+        }
+        else {
+            if (!_.isArray($scope.ngModel) && !_.isObject($scope.ngModel)) return;
+            var selectedItems = _.isArray($scope.ngModel) ? $scope.ngModel : new Array($scope.ngModel);
+            if (input) {
+                populatePreselectedInputOptions(select, selectedItems, options.id, inputOptionsLabelProperty);
+            } else {
+                populatePreselectedOptions(select, selectedItems, options.value);
+            }
+        }
+    }
+    /**
+     * @ngdoc method
+     * @name scania.angular.select2#populatePreselectedOptions
+     * @methodOf scania.angular.select2
+     *
+     * @description
+     * Prepopulate the select component
+     *
+     */
+    function populatePreselectedOptions(scSelect, selectedItems, key) {
+        //throw "Data-value for " + scSelect[0].id +" must have the same value as its track by.";
+        var selectedOptions = [];
+        _.each(selectedItems, function (selectedItem) {
+            var selectedId = selectedItem[key];
+            var selectedOption = _.find(scSelect[0], function (option) {
+                return selectedId == option.value;
+            });
+            if (!selectedOption) {
+                console.error("Data-value for " + scSelect[0].id + " must have the same value as its track by.");
+                return;
+            }
+            selectedOptions.push({id: selectedId, text: selectedOption.label});
+
+        });
+        if (selectedItems.length == 1) selectedOptions = selectedOptions.pop();
+        scSelect.select2('data', selectedOptions);
+    }
+    /**
+     * @ngdoc method
+     * @name scania.angular.select2#populatePreselectedInputOptions
+     * @methodOf scania.angular.select2
+     *
+     * @description
+     * Prepopulate the input component
+     *
+     */
+    function populatePreselectedInputOptions(scSelect, selectedItems, key, inputOptionsLabelProperty) {
+        var selectedOptions = [];
+        _.each(selectedItems, function (selectedItem) {
+            var option = {};
+            option[key] = selectedItem[key];
+            option[inputOptionsLabelProperty] = selectedItem[inputOptionsLabelProperty];
+            selectedOptions.push(option);
+        });
+        if (selectedItems.length == 1) selectedOptions = selectedOptions.pop();
+        scSelect.select2('data', selectedOptions);
+    }
+    /**
+     * @ngdoc method
+     * @name scania.angular.select2#createSelect
+     * @methodOf scania.angular.select2
+     *
+     * @description
+     * Creates the select component
+     *
+     */
+    function createSelect($scope, element, $attr, $compile, $timeout) {
+        var options = init($scope, element, $attr, $compile),
+            select = {};
+
+        $timeout(function () {
+            select = $('select[id="' + $attr.id + '"]');
+            select.select2(options);
+
+            updateSelectedItemsOnDisplay($scope, select, options);
+            $scope.$watch('ngModel', function () {
+                updateSelectedItemsOnDisplay($scope, select, options);
+            });
+        });
+    }
+    /**
+     * @ngdoc method
+     * @name scania.angular.select2#startsWith
+     * @methodOf scania.angular.select2
+     *
+     * @description
+     * Check the leading character in a string agains a predicate
+     *
+     */
+    function startsWith(str, target) {
+        return str.indexOf(target) === 0;
+    }
+
+    /**
+     * @ngdoc method
+     * @name scania.angular.select2#scSingleSelect
+     * @module scania.angular.select2
+     *
+     * @description AngularJS directive for single select
+     * @param $compile
+     * @param $timeout
+     * @returns {{restrict: string, scope: {ngModel: string, templateSelection: Function, templateResult: Function, matcher: Function, createSearchChoice: Function}, link: Function}}
+     */
+    function scSingleSelect($compile, $timeout) {
+        return {
+            restrict: 'A',
+            scope: {
+                ngModel: '=',
+                templateSelection: '=',
+                templateResult: '=',
+                matcher: '=',
+                createSearchChoice: '='
             },
-            closeAll: function () {
-                stack.forEach(function (elem) {
-                    elem.close();
-                });
+            link: function ($scope, element, $attr) {
+                createSelect($scope, element, $attr, $compile, $timeout);
             }
         };
-    })
-    .directive("select2", ["$rootScope", "$timeout", "$parse", "$filter", "select2Config", "select2Stack", function ($rootScope, $timeout, $parse, $filter, select2Config, select2Stack) {
-        "use strict";
 
-        var filter = $filter("filter");
-
-        function sortedKeys(obj) {
-            var keys = [];
-            for (var key in obj) {
-                if (obj.hasOwnProperty(key)) {
-                    keys.push(key);
-                }
-            }
-            return keys.sort();
-        }
-
-        var defaultOptions = {};
-        //                       0000111110000000000022220000000000000000000000333300000000000000444444444444444000000000555555555555555000000066666666666666600000000000000007777000000000000000000088888
-        var NG_OPTIONS_REGEXP = /^\s*(.*?)(?:\s+as\s+(.*?))?(?:\s+group\s+by\s+(.*))?\s+for\s+(?:([\$\w][\$\w]*)|(?:\(\s*([\$\w][\$\w]*)\s*,\s*([\$\w][\$\w]*)\s*\)))\s+in\s+(.*?)(?:\s+track\s+by\s+(.*?))?$/;
-
-        if (select2Config) {
-            angular.extend(defaultOptions, select2Config);
-        }
-
+    }
+    /**
+     * @ngdoc method
+     * @name scania.angular.select2#scMultiSelect
+     * @module scania.angular.select2
+     *
+     * @description AngularJS directive for multi select
+     * @param $compile
+     * @param $timeout
+     * @returns {{restrict: string, scope: {ngModel: string, templateSelection: Function, templateResult: Function, matcher: Function, createSearchChoice: Function}, link: Function}}
+     */
+    function scMultiSelect($compile, $timeout) {
         return {
-            require: "ngModel",
-            priority: 1,
-            restrict: "E",
-            template: "<input type=\"hidden\"></input>",
-            replace: true,
-            link: function (scope, element, attrs, controller) {
-                var getOptions;
-
-                var opts = angular.extend({}, defaultOptions, scope.$eval(attrs.options));
-                var isMultiple = angular.isDefined(attrs.multiple) || opts.multiple;
-
-                opts.multiple = isMultiple;
-
-                // make sure ngrequired validation works
-                if (isMultiple) {
-                    controller.$isEmpty = function (value) {
-                        return !value || value.length === 0;
-                    };
-                }
-
-                if (attrs.placeholder) {
-                    opts.placeholder = attrs.placeholder;
-                }
-
-                var filterOptions = $parse(attrs.optionsFilter);
-
-                // All values returned from Select2 are strings. This is a
-                // problem if you supply integer indexes: they'll become
-                // strings once passing through this directive. We keep a
-                // mapping between string keys and values through the
-                // optionItems object, to be able to return the correctly typed
-                // value.
-                var optionItems = {};
-
-                function filterValues(values) {
-                    if (filterOptions) {
-                        var filterParams = filterOptions(scope);
-                        if (filterParams) {
-                            return filter(values, filterParams);
-                        }
-                    }
-
-                    return values;
-                }
-
-                if (attrs.s2Options) {
-                    var match;
-                    if (!(match = attrs.s2Options.match(NG_OPTIONS_REGEXP))) {
-                        throw new Error("Invalid s2Options encountered!");
-                    }
-
-                    var displayFn = $parse(match[2] || match[1]);
-                    var valuesFn = $parse(match[7]);
-                    var valueName = match[4] || match[6];
-                    var valueFn = $parse(match[2] ? match[1] : valueName);
-                    var keyName = match[5];
-
-                    getOptions = function (callback) {
-                        optionItems = {};
-                        var values = filterValues(valuesFn(scope));
-                        var keys = (keyName ? sortedKeys(values) : values) || [];
-
-                        var options = [];
-                        for (var i = 0; i < keys.length; i++) {
-                            var locals = {};
-                            var key = i;
-                            if (keyName) {
-                                key = keys[i];
-                                locals[keyName] = key;
-                            }
-                            locals[valueName] = values[key];
-
-                            var value = valueFn(scope, locals);
-                            var label = displayFn(scope, locals) || "";
-
-                            // Select2 returns strings, we use a dictionary to get
-                            // back to the original value.
-                            optionItems[value] = {
-                                id: value,
-                                text: label,
-                                obj: values[key]
-                            };
-
-                            options.push(optionItems[value]);
-                        }
-
-                        callback(options);
-                    };
-
-                    opts.query = function (query) {
-                        var values = filterValues(valuesFn(scope));
-                        var keys = (keyName ? sortedKeys(values) : values) || [];
-
-                        var options = [];
-                        for (var i = 0; i < keys.length; i++) {
-                            var locals = {};
-                            var key = i;
-                            if (keyName) {
-                                key = keys[i];
-                                locals[keyName] = key;
-                            }
-                            locals[valueName] = values[key];
-
-                            var value = valueFn(scope, locals);
-                            var label = displayFn(scope, locals) || "";
-
-                            if (label.toLowerCase().indexOf(query.term.toLowerCase()) > -1) {
-                                options.push({
-                                    id: value,
-                                    text: label,
-                                    obj: values[key]
-                                });
-                            }
-                        }
-
-                        query.callback({
-                            results: options
-                        });
-                    };
-
-                    // Make sure changes to the options get filled in
-                    scope.$watch(match[7], function () {
-                        controller.$render();
-                    });
-                } else {
-                    if (!opts.query) {
-                        throw new Error("You need to supply a query function!");
-                    }
-
-                    var queryFn = opts.query;
-                    opts.query = function (query) {
-                        var cb = query.callback;
-                        query.callback = function (data) {
-                            for (var i = 0; i < data.results.length; i++) {
-                                var result = data.results[i];
-                                optionItems[result.id] = result;
-                            }
-                            cb(data);
-                        };
-                        queryFn(query);
-                    };
-
-                    getOptions = function (callback) {
-                        opts.query({
-                            term: "",
-                            callback: function (query) {
-                                callback(query.results);
-                            }
-                        });
-                    };
-                }
-
-                function getSelection(callback) {
-                    if (isMultiple) {
-                        getOptions(function (options) {
-                            var selection = [];
-                            for (var i = 0; i < options.length; i++) {
-                                var option = options[i];
-                                var viewValue = controller.$viewValue || [];
-                                if (viewValue.indexOf(option.id) > -1) {
-                                    selection.push(option);
-                                }
-                            }
-                            callback(selection);
-                        });
-                    } else {
-                        getOptions(function () {
-                            callback(optionItems[controller.$viewValue] || { obj: {} });
-                        });
-                    }
-                }
-
-                controller.$render = function () {
-                    getSelection(function (selection) {
-                        if (isMultiple) {
-                            element.select2("data", selection);
-                        } else {
-                            element.select2("val", selection.id);
-                        }
-                    });
-                };
-
-                if (!opts.initSelection) {
-                    opts.initSelection = function (element, callback) {
-                        getSelection(callback);
-                    };
-                } else {
-                    var _initSelection = opts.initSelection;
-                    opts.initSelection = function (element, callback) {
-                        _initSelection(element, function (result) {
-                            optionItems[result.id] = result;
-                            callback(result);
-                        });
-                    };
-                }
-
-                // register with the select2stack
-                var controlObj = {
-                    close: function () {
-                        element.select2("close");
-                    }
-                };
-                select2Stack.$register(controlObj);
-                scope.$on("destroy", function () {
-                    select2Stack.$unregister(controlObj);
-                });
+            restrict: 'A',
+            scope: {
+                ngModel: '=',
+                templateSelection: '=',
+                templateResult: '=',
+                matcher: '=',
+                createSearchChoice: '='
+            },
+            link: function ($scope, element, $attr) {
+                createSelect($scope, element, $attr, $compile, $timeout);
+            }
+        };
+    }
+    /**
+     * @ngdoc method
+     * @name scania.angular.select2#scInputSelect
+     * @module scania.angular.select2
+     *
+     * @description AngularJS directive for input select
+     * @param $compile
+     * @param $timeout
+     * @returns {{restrict: string, scope: {ngModel: string, templateSelection: Function, templateResult: Function, matcher: Function, createSearchChoice: Function, tokenSeparators: Function}, link: Function}}
+     */
+    function scInputSelect($compile, $timeout) {
+        return {
+            restrict: 'A',
+            scope: {
+                ngModel: '=',
+                templateSelection: '=',
+                templateResult: '=',
+                matcher: '=',
+                createSearchChoice: '=',
+                tokenSeparators: '='
+            },
+            link: function ($scope, element, $attr) {
+                var options = init($scope, element, $attr, $compile),
+                    select = {},
+                    tokenSeparators = [",", " "],
+                    inputOptionsLabelProperty = '';
 
                 $timeout(function () {
-                    element.select2(opts);
-                    element.on("change", function (e) {
-                        scope.$evalAsync(function () {
-                            var val;
-                            if (isMultiple) {
-                                var vals = [];
-                                for (var i = 0; i < e.val.length; i++) {
-                                    val = optionItems[e.val[i]];
-                                    if (val) {
-                                        vals.push(val.id);
-                                    }
-                                }
-                                controller.$setViewValue(vals);
-                            } else {
-                                val = optionItems[e.val];
-                                controller.$setViewValue(val ? val.id : null);
-                            }
 
-                            controller.$render();
+                    options.data = {results: JSON.parse($attr.data), text: $attr.label};
+                    options.createSearchChoice = $scope.createSearchChoice;
+                    options.tokenSeparators = $scope.tokenSeparators || tokenSeparators;
+                    options.id = $attr.itemId;
+                    inputOptionsLabelProperty = options.label;
 
-                        });
+                    select = $('input[id="' + $attr.id + '"]');
+                    select.select2(options);
+
+                    updateSelectedItemsOnDisplay($scope, select, options, inputOptionsLabelProperty, 'input');
+                    $scope.$watch('ngModel', function () {
+                        updateSelectedItemsOnDisplay($scope, select, options, inputOptionsLabelProperty, 'input');
                     });
-
-                    element.on("select2-blur", function () {
-                        if (controller.$touched) {
-                            return;
-                        }
-
-                        scope.$evalAsync(controller.$setTouched);
-                    });
-
-                    controller.$render();
                 });
             }
         };
-    }]);
+    }
+})();

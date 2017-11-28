@@ -95,6 +95,7 @@
                 <span class="pull-right-container"><i class="fa fa-angle-left pull-right"></i></span>
               </a>
               <ul class="treeview-menu">
+                <li><a href="{{ route('department_path') }}"><i class="fa fa-circle-o"></i>Departamentos</a></li>
                 <li><a href="{{ route('provider_path') }}"><i class="fa fa-circle-o"></i>Proveedores</a></li>
                 <li><a href="{{ route('creditor_path') }}"><i class="fa fa-circle-o"></i>Acreedores</a></li>
                 <li><a href="{{ route('products_inventory_path') }}"><i class="fa fa-circle-o"></i>Inventario de productos</a></li>
@@ -115,6 +116,7 @@
                   <li><a href="{{ route('cat_reference_path') }}"><i class="fa fa-circle-o"></i>Referencias</a></li>
                   <li><a href="{{ route('cat_package_path') }}"><i class="fa fa-circle-o"></i>Paquetes</a></li>
                   <li><a href="{{ route('cat_product_path') }}"><i class="fa fa-circle-o"></i>Productos</a><li>
+                  <li><a href="{{ route('cat_service_path') }}"><i class="fa fa-circle-o"></i>Servicios</a><li>
                   <li><a href="{{ route('cat_pill_path') }}"><i class="fa fa-circle-o"></i>Pastillas</a><li>
                 </ul>
             </li>

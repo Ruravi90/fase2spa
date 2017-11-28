@@ -3,7 +3,7 @@ app.controller('ScheduleController',function($rootScope,$scope, $http,$document,
     $scope.pageSize = 10;
     $scope.currentPage = 1;
 
-     $('#calendar').fullCalendar({
+    $('#fullcalendar').fullCalendar({
         // put your options and callbacks here
     })
 

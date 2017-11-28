@@ -3,7 +3,7 @@ function geturl(){
     return window.location.origin+'/';
 }
 
-var app = angular.module('App', ['ui.bootstrap','cp.ngConfirm','ui-notification', 'ui.bootstrap.datetimepicker','scania.angular.select2'], function($interpolateProvider) {
+var app = angular.module('App', ['ui.bootstrap','cp.ngConfirm','ui-notification', 'ui.bootstrap.datetimepicker','scania.angular.select2','ngSanitize', 'ui.select'], function($interpolateProvider) {
 	$interpolateProvider.startSymbol('<%');
 	$interpolateProvider.endSymbol('%>');
 });
